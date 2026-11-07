@@ -1,0 +1,4 @@
+interface:
+  display_name: "Process Sunday School PDF"
+  short_description: "Convert stage notes into linked lessons and graphics"
+  default_prompt: "Use $process-sunday-school-pdf to convert this intermediate stage PDF into individual lessons, a linked index, and extracted graphics."
