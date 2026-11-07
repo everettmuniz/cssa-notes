@@ -18,11 +18,11 @@ There are 250 lessons in total: 125 Intermediate and 125 Senior, with 25 lessons
 
 | Stage | Lesson index | Original book | Graphics |
 | --- | --- | --- | --- |
-| 1 | [The Preparation of the Kingdom](Senior%20Stage%201%20-%20The%20Preparation%20of%20the%20Kingdom%20-%20Lessons.md) | [PDF](15%20and%20Over%20Stage%201%20of%205%20-%20The%20Preparation%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_1_graphics/) |
-| 2 | [The Establishment of the Kingdom](Senior%20Stage%202%20-%20The%20Establishment%20of%20the%20Kingdom%20-%20Lessons.md) | [PDF](15%20and%20Over%20Stage%202%20of%205%20-%20The%20Establishment%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_2_graphics/) |
-| 3 | [The Glory and Decline](Senior%20Stage%203%20-%20The%20Glory%20and%20Decline%20-%20Lessons.md) | [PDF](15%20and%20Over%20Stage%203%20of%205%20-%20The%20Glory%20and%20Decline.pdf) | [Maps and illustrations](senior_3_graphics/) |
-| 4 | [The Royal Majesty of the Kingdom](Senior%20Stage%204%20-%20The%20Royal%20Majesty%20of%20the%20Kingdom%20-%20Lessons.md) | [PDF](15%20and%20Over%20Stage%204%20of%205%20-%20The%20Royal%20Majesty%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_4_graphics/) |
-| 5 | [The Good News of the Kingdom](Senior%20Stage%205%20-%20The%20Good%20News%20of%20the%20Kingdom%20-%20Lessons.md) | [PDF](15%20and%20Over%20Stage%205%20of%205%20-%20The%20Good%20News%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_5_graphics/) |
+| 1 | [The Preparation of the Kingdom](Senior%20S1%20-%20Preparation%20of%20the%20Kingdom.md) | [PDF](15%20and%20Over%20Stage%201%20of%205%20-%20The%20Preparation%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_1_graphics/) |
+| 2 | [The Establishment of the Kingdom](Senior%20S2%20-%20Establishment%20of%20the%20Kingdom.md) | [PDF](15%20and%20Over%20Stage%202%20of%205%20-%20The%20Establishment%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_2_graphics/) |
+| 3 | [The Glory and Decline](Senior%20S3%20-%20The%20Glory%20and%20Decline.md) | [PDF](15%20and%20Over%20Stage%203%20of%205%20-%20The%20Glory%20and%20Decline.pdf) | [Maps and illustrations](senior_3_graphics/) |
+| 4 | [The Royal Majesty of the Kingdom](Senior%20S4%20-%20Royal%20Majesty%20of%20the%20Kingdom.md) | [PDF](15%20and%20Over%20Stage%204%20of%205%20-%20The%20Royal%20Majesty%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_4_graphics/) |
+| 5 | [The Good News of the Kingdom](Senior%20S5%20-%20Good%20News%20of%20the%20Kingdom.md) | [PDF](15%20and%20Over%20Stage%205%20of%205%20-%20The%20Good%20News%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_5_graphics/) |
 
 ## Using the material
 

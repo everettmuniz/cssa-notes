@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "intermediate_4_lessons/Lesson 01 - The Baptism and Temptation of Jesus.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Lesson 01 - The Baptism and Temptation of Jesus"
+              "title": "README"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "intermediate_4_lessons/Lesson 01 - The Baptism and Temptation of Jesus.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "intermediate_4_lessons/Lesson 01 - The Baptism and Temptation of Jesus.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "intermediate_4_lessons/Lesson 01 - The Baptism and Temptation of Jesus.md",
+                "file": "README.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -188,8 +188,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "c90679bd7b81b418",
+  "active": "8169a97306343e97",
   "lastOpenFiles": [
+    "Senior S5 - Good News of the Kingdom.md",
+    "Senior S4 - Royal Majesty of the Kingdom.md",
+    "Senior S2 - Establishment of the Kingdom.md",
+    "Senior S1 - Preparation of the Kingdom.md",
+    "Senior S3 - The Glory and Decline.md",
+    "intermediate_4_lessons/Lesson 01 - The Baptism and Temptation of Jesus.md",
     "tmp/senior-4/reviewed-007.md",
     "tmp/senior-3/reviewed-012.md",
     "tmp/senior-3/reviewed-089.md",
@@ -210,12 +216,6 @@
     "senior_5_lessons/Lesson 10 - The First Preaching Campaign - the Gospel Spreads Among Gentiles.md",
     "senior_5_lessons/Lesson 09 - Cornelius - the First Gentile Convert.md",
     "senior_5_lessons/Lesson 08 - The Conversion of Saul.md",
-    "senior_5_lessons/Lesson 07 - The Gospel Net Widens - to Samaria and Ethiopia.md",
-    "senior_5_lessons/Lesson 06 - Stephen - Martyr for the Kingdom.md",
-    "senior_5_lessons/Lesson 05 - Obeying God Rather Than Men.md",
-    "senior_5_lessons/Lesson 04 - The Apostles on Trial before the Sanhedrin.md",
-    "tmp/senior-5/reviewed-066.md",
-    "tmp/senior-4/reviewed-123.md",
     "tmp/repair-senior-questions.py",
     "tmp/senior-3/review-140.png",
     "tmp/finalize-senior.py",
