@@ -4,6 +4,7 @@ import json
 import os
 import re
 import subprocess
+import statistics
 from pathlib import Path
 from urllib.parse import quote, unquote, urlsplit
 
@@ -113,6 +114,9 @@ def page_markdown(page, first=False):
     if first and lines and re.match(r"^\d+[.,]\s", lines[0]["text"]):
         lines = lines[1:]
     base = min((x["x0"] for x in lines), default=0)
+    pitches = [b["top"] - a["top"] for a, b in zip(lines, lines[1:])
+               if 3 < b["top"] - a["top"] < 25]
+    paragraph_pitch = statistics.median(pitches) * 1.45 if pitches else 14
     result, buffer, prev = [], "", None
 
     def flush():
@@ -129,9 +133,12 @@ def page_markdown(page, first=False):
             flush()
             result.append("### " + text.rstrip(":"))
         else:
-            if prev and (line["top"] - prev["bottom"] > 5 or
-                         6 < line["x0"] - base < 22 or re.match(r"^\d+[.]\s", text)):
+            if prev and (line["top"] - prev["top"] > paragraph_pitch or
+                         (6 < line["x0"] - base < 22 and not re.match(r"^(?:\d+[.]|[-•])\s", buffer)) or
+                         re.match(r"^(?:\d+[.]|[-•])\s", text)):
                 flush()
+            if text.startswith("•"):
+                text = "- " + text[1:].lstrip()
             if buffer.endswith("-"):
                 buffer = buffer[:-1] + text
             else:
@@ -157,8 +164,11 @@ def outputs(plan, out):
     name = plan.get("index_filename", f"{plan['title']} - Lessons.md")
     if Path(name).name != name or not name.endswith(".md"):
         raise ValueError("index_filename must be a Markdown basename.")
-    return (out / name, out / f"intermediate_{stage}_lessons",
-            out / f"intermediate_{stage}_graphics")
+    prefix = plan.get("folder_prefix", "intermediate")
+    if not re.fullmatch(r"[a-z][a-z0-9_]*", prefix):
+        raise ValueError("folder_prefix must be a simple lowercase folder prefix.")
+    return (out / name, out / f"{prefix}_{stage}_lessons",
+            out / f"{prefix}_{stage}_graphics")
 
 
 def build(args):
@@ -192,7 +202,7 @@ def build(args):
     for lesson in plan["lessons"]:
         n = lesson["number"]
         blocks = [f"# Lesson {n}: {lesson['title']}",
-                  f"**{plan['title']} - Stage {plan['stage']} of 5 | Ages 13-14**",
+                  f"**{plan['title']} - Stage {plan['stage']} of 5 | Ages {plan.get('ages', '13-14')}**",
                   f"Source: {publisher}. Converted from the source PDF; some scan/OCR errors may remain. Page references use PDF page numbers.",
                   local_link("Original PDF", source, lessons_dir),
                   "*Source: PDF pages " + ", ".join(map(str, lesson["pages"])) + ".*"]
@@ -202,7 +212,7 @@ def build(args):
         blocks += [text_for(p, j == 0) for j, p in enumerate(lesson["pages"])]
         (lessons_dir / filename(lesson)).write_text("\n\n".join(blocks) + "\n", encoding="utf-8")
     blocks = [f"# {plan['title']}",
-              f"**Stage {plan['stage']} of 5 - Intermediate Sunday School notes, ages 13-14**",
+              f"**Stage {plan['stage']} of 5 - {plan.get('level', 'Intermediate')} Sunday School notes, ages {plan.get('ages', '13-14')}**",
               f"Source: {publisher}. This index links to individual lesson files containing teaching notes, applications, reference libraries, and review questions. Page references use physical PDF page numbers.",
               local_link("Original PDF", source, out)]
     course = [g for g in plan.get("graphics", []) if g.get("course")]

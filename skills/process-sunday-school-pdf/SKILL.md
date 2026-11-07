@@ -1,11 +1,11 @@
 ---
 name: process-sunday-school-pdf
-description: Convert intermediate Sunday School stage PDFs into one Markdown file per lesson, a linked stage index, and extracted graphic pages using the established intermediate stage folder scheme.
+description: Convert Intermediate or Senior Sunday School stage PDFs into individual Markdown lessons, a linked stage index, and extracted graphic pages.
 ---
 
 # Process Sunday School PDFs
 
-Use for the intermediate (ages 13-14) five-stage notes. Stage 4 established the conventions; process stages 1, 2, 3, and 5 the same way. Derive lesson counts, titles, page boundaries, and graphics from each new source rather than assuming Stage 4's 25 lessons or page numbers.
+Use for the Intermediate (ages 13-14) and Senior (ages 15 and over) five-stage notes. Derive lesson counts, titles, page boundaries, and graphics from each new source rather than assuming another book's lesson sequence or page numbers.
 
 ## Deliverables
 
@@ -14,6 +14,8 @@ In the user's output directory, create:
 - `intermediate_{stage}_lessons/Lesson 01 - {Title}.md`, one file per lesson, numbered with two digits in filenames.
 - `intermediate_{stage}_graphics/page-001.png`, full graphic pages rendered at 150 dpi, numbered by physical PDF page (1-based).
 - `{Book Title} - Lessons.md`, a stage index with links to the individual lesson files, source PDF, course graphics, and foreword when present. Do not include lesson bodies in the index. If that index filename belongs to another stage, choose a stage-qualified filename.
+
+For Senior books, set `folder_prefix: "senior"`, `level: "Senior"`, and `ages: "15 and over"` in the plan. This produces `senior_{stage}_lessons/` and `senior_{stage}_graphics/`. Use `Senior Stage {stage} - {Book Title} - Lessons.md` for the index to avoid collisions with Intermediate books. Omitted fields retain the original Intermediate defaults. Treat the two levels as independent source material.
 
 Keep graphics and lessons in sibling folders, with relative, URL-encoded links so the set remains portable. The original PDF stays intact. Preserve teaching notes, Scripture references, applications, reference libraries, paragraph questions, and essay questions. This is a conversion, not a summary or newly authored lesson. Retain the source's theological perspective and historical context; correct clear OCR errors against the scan without silently revising teachings or modernizing dated claims.
 
