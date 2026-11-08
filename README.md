@@ -24,6 +24,12 @@ There are 250 lessons in total: 125 Intermediate and 125 Senior, with 25 lessons
 | 4 | [The Royal Majesty of the Kingdom](Senior%20S4%20-%20Royal%20Majesty%20of%20the%20Kingdom.md) | [PDF](15%20and%20Over%20Stage%204%20of%205%20-%20The%20Royal%20Majesty%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_4_graphics/) |
 | 5 | [The Good News of the Kingdom](Senior%20S5%20-%20Good%20News%20of%20the%20Kingdom.md) | [PDF](15%20and%20Over%20Stage%205%20of%205%20-%20The%20Good%20News%20of%20the%20Kingdom.pdf) | [Maps and illustrations](senior_5_graphics/) |
 
+## Lesson plans
+
+Class plans include Scripture readings, discussion prompts, and practical applications for each Sunday.
+
+- [November 8, 2026 — The Baptism and Temptation of Jesus](2026/11_08.md)
+
 ## Using the material
 
 Start with a stage's lesson index, then choose a lesson. The Markdown files contain teaching notes, Scripture references, applications, reference libraries, and review questions from the source books. Related graphics and the original PDF are linked from the lessons where applicable.
