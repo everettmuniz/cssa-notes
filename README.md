@@ -46,6 +46,6 @@ The Markdown is a conversion of the source material, not a summary. Some scan or
 - `senior_1_graphics/` through `senior_5_graphics/`: full-page Senior graphics, named by their source PDF page number.
 - `Intermediate S… - ….md` and `Senior Stage … - Lessons.md`: stage indexes linking the material together.
 - `13-14 Stage … .pdf` and `15 and Over Stage … .pdf`: original source books.
-- [PDF processing skill](skills/process-sunday-school-pdf/SKILL.md): reusable instructions and tooling for converting stage PDFs into this structure.
+- [PDF processing skill](skills/muniz-process-sunday-school-pdf/SKILL.md): reusable instructions and tooling for converting stage PDFs into this structure.
 
 Source material is attributed to the Christadelphian Sunday School Association in the stage indexes and lesson files.

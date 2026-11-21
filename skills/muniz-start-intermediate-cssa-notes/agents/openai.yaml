@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start Intermediate CSSA Notes"
+  short_description: "Draft next Sunday's class plan from the scheduled lesson"
+  default_prompt: "Use $muniz-start-intermediate-cssa-notes to start my Sunday School notes for this Sunday."

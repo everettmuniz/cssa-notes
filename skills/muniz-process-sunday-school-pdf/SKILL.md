@@ -1,5 +1,5 @@
 ---
-name: process-sunday-school-pdf
+name: muniz-process-sunday-school-pdf
 description: Convert Intermediate or Senior Sunday School stage PDFs into individual Markdown lessons, a linked stage index, and extracted graphic pages.
 ---
 
