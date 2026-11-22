@@ -149,14 +149,129 @@ def page_markdown(page, first=False):
 
 
 def filename(lesson):
-    title = re.sub(r'[<>:"/\\|?*\x00-\x1f]', " -", lesson["title"])
+    title = re.sub(r'[<>:"/\\|?*#^\[\]\x00-\x1f]', " -", lesson["title"])
     title = re.sub(r"\s+", " ", title).strip(" .")
     return f"Lesson {lesson['number']:02d} - {title}.md"
 
 
-def local_link(label, target, parent):
-    relative = Path(os.path.relpath(target, parent)).as_posix()
-    return f"[{label}]({quote(relative, safe='/')})"
+def link_name(path):
+    """Name Obsidian matches for a bare link: Markdown files drop `.md`."""
+    path = Path(path)
+    return (path.stem if path.suffix.lower() == ".md" else path.name).casefold()
+
+
+def find_vault(start):
+    """Nearest folder at or above `start` that contains `.obsidian/`, else None."""
+    start = Path(start).resolve()
+    for folder in [start, *start.parents]:
+        if (folder / ".obsidian").is_dir():
+            return folder
+    return None
+
+
+def vault_files(vault):
+    for root, dirs, files in os.walk(vault):
+        dirs[:] = [d for d in dirs if not d.startswith(".")]
+        for name in files:
+            yield Path(root, name).resolve()
+
+
+MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+WIKILINK = re.compile(r"!?\[\[([^\]]+)\]\]")
+
+
+class Linker:
+    """Writes and resolves local links in the one style the output location calls for.
+
+    No `.obsidian/` above the output: relative, URL-encoded Markdown links.
+    Inside an Obsidian vault: follow `.obsidian/app.json` exactly as Obsidian would.
+    `useMarkdownLinks` false/absent -> wikilinks; true -> Markdown links.
+    `newLinkFormat` "shortest" (default) -> bare name when unique in the vault, else
+    vault-root path; "absolute" -> vault-root path; "relative" -> path from the note.
+    """
+
+    def __init__(self, out, planned=()):
+        self.vault = find_vault(out)
+        settings = {}
+        if self.vault and (self.vault / ".obsidian" / "app.json").is_file():
+            settings = read_json(self.vault / ".obsidian" / "app.json")
+        self.wiki = bool(self.vault) and not settings.get("useMarkdownLinks", False)
+        self.format = settings.get("newLinkFormat", "shortest") if self.vault else "relative"
+        if self.format not in ("shortest", "absolute", "relative"):
+            raise ValueError(f"Unsupported Obsidian newLinkFormat: {self.format}")
+        self.by_name = {}
+        if self.vault:
+            for p in {*vault_files(self.vault), *(Path(x).resolve() for x in planned)}:
+                self.by_name.setdefault(link_name(p), set()).add(p)
+
+    def describe(self):
+        if not self.vault:
+            return "relative Markdown links (no Obsidian vault found)"
+        kind = "wikilinks" if self.wiki else "Markdown links"
+        return f"Obsidian {kind}, {self.format} paths (vault: {self.vault})"
+
+    def link(self, label, target, parent):
+        target = Path(target).resolve()
+        if not self.vault:
+            relative = Path(os.path.relpath(target, parent)).as_posix()
+            return f"[{label}]({quote(relative, safe='/')})"
+        try:
+            from_root = target.relative_to(self.vault).as_posix()
+        except ValueError:
+            raise ValueError(f"{target} is outside the Obsidian vault {self.vault}; copy it into "
+                             "the vault (normally the output folder) and point the plan at the copy.")
+        if self.format == "absolute":
+            path = from_root
+        elif self.format == "relative":
+            path = Path(os.path.relpath(target, parent)).as_posix()
+            if self.wiki and not path.startswith("../"):
+                path = "./" + path
+        else:
+            path = target.name if len(self.by_name.get(link_name(target), ())) == 1 else from_root
+        if not self.wiki:
+            return f"[{label}]({quote(path, safe='/')})"
+        if any(c in label for c in "[]|"):
+            raise ValueError(f"Link label cannot contain [, ] or | in a wikilink: {label}")
+        if path.lower().endswith(".md"):
+            path = path[:-3]
+        return f"[[{path}]]" if label == path.rsplit("/", 1)[-1] else f"[[{path}|{label}]]"
+
+    def links(self, text, source):
+        """Resolve every local link in `text`; raise on a broken, ambiguous or off-style link."""
+        found = []
+        markdown = [m.group(1).strip("<>") for m in MARKDOWN_LINK.finditer(text)]
+        markdown = [unquote(urlsplit(t).path) for t in markdown if not urlsplit(t).scheme and urlsplit(t).path]
+        wiki = [re.split(r"\\?\|", m.group(1))[0].split("#")[0] for m in WIKILINK.finditer(text)]
+        if self.wiki and markdown:
+            raise ValueError(f"Markdown link in {source}; this vault uses wikilinks: {markdown[0]}")
+        if not self.wiki and wiki:
+            raise ValueError(f"Wikilink in {source}; this location uses Markdown links: [[{wiki[0]}]]")
+        found += [self.resolve(t, source, wiki=False) for t in markdown]
+        found += [self.resolve(t, source, wiki=True) for t in wiki]
+        return found
+
+    def resolve(self, t, source, wiki):
+        if wiki and self.vault and "/" not in t:
+            matches = self.by_name.get(link_name(t + ".md"), set())
+            if len(matches) != 1:
+                kind = "Ambiguous" if matches else "Broken"
+                raise ValueError(f"{kind} link in {source}: [[{t}]] matches {len(matches)} files")
+            return next(iter(matches))
+        bases = [source.parent]
+        if self.vault and not t.startswith(("./", "../")):
+            bases.append(self.vault)
+        names = [t, t + ".md"] if wiki else [t]
+        for base in bases:
+            for name in names:
+                if (base / name).is_file():
+                    return (base / name).resolve()
+        if self.vault and "/" not in t:
+            matches = self.by_name.get(link_name(t), set())
+            if len(matches) == 1:
+                return next(iter(matches))
+            if matches:
+                raise ValueError(f"Ambiguous link in {source}: {t} matches {len(matches)} files")
+        raise ValueError(f"Broken link in {source}: {t}")
 
 
 def outputs(plan, out):
@@ -181,6 +296,9 @@ def build(args):
         raise ValueError("Output filename collision.")
     if not args.overwrite and any(x.exists() for x in targets):
         raise ValueError("Output exists; review it before using --overwrite.")
+    linker = Linker(out, targets)
+    local_link = linker.link
+    local_link("Original PDF", source, out)  # fail early if the source is outside a vault
     lessons_dir.mkdir(parents=True, exist_ok=True)
     graphics_dir.mkdir(parents=True, exist_ok=True)
     for graphic in plan.get("graphics", []):
@@ -236,7 +354,9 @@ def validate(args):
         raise ValueError("Lesson file inventory differs from plan.")
     if {x.name for x in graphics_dir.glob("*.png")} != {f"page-{g['page']:03d}.png" for g in plan.get("graphics", [])}:
         raise ValueError("Graphics inventory differs from plan.")
+    linker = Linker(out)
     count = 0
+    resolved = {}
     for p in [index, *[lessons_dir / filename(x) for x in plan["lessons"]]]:
         text = p.read_text(encoding="utf-8")
         if "\ufffd" in text:
@@ -245,29 +365,27 @@ def validate(args):
             raise ValueError("Index contains lesson bodies.")
         if p != index and len(re.findall(r"^# Lesson \d+:", text, re.M)) != 1:
             raise ValueError(f"Expected one lesson heading in {p}")
-        for target in re.findall(r"\]\(([^)]+)\)", text):
-            url = urlsplit(target.strip("<>"))
-            if url.scheme or not url.path:
-                continue
-            if not (p.parent / unquote(url.path)).exists():
-                raise ValueError(f"Broken link in {p}: {target}")
-            count += 1
+        resolved[p] = set(linker.links(text, p))
+        count += len(resolved[p])
     for lesson in plan["lessons"]:
         content = (lessons_dir / filename(lesson)).read_text(encoding="utf-8")
         for n in lesson["pages"]:
             if f"<!-- PDF page {n} -->" not in content:
                 raise ValueError(f"Missing text page {n}")
-    index_text = index.read_text(encoding="utf-8")
     for lesson in plan["lessons"]:
-        if quote(filename(lesson), safe="/") not in index_text:
-            raise ValueError("Lesson missing from index links.")
+        if (lessons_dir / filename(lesson)).resolve() not in resolved[index]:
+            raise ValueError(f"Lesson missing from index links: {filename(lesson)}")
     for graphic in plan.get("graphics", []):
-        with Image.open(graphics_dir / f"page-{graphic['page']:03d}.png") as image:
+        png = graphics_dir / f"page-{graphic['page']:03d}.png"
+        with Image.open(png) as image:
             image.verify()
         for n in graphic["lessons"]:
-            lesson = plan["lessons"][n-1]
-            if f"page-{graphic['page']:03d}.png" not in (lessons_dir / filename(lesson)).read_text(encoding="utf-8"):
-                raise ValueError("Graphic missing from intended lesson.")
+            lesson_file = lessons_dir / filename(plan["lessons"][n-1])
+            if png.resolve() not in resolved[lesson_file]:
+                raise ValueError(f"Graphic {png.name} missing from lesson {n}.")
+        if graphic.get("course") and png.resolve() not in resolved[index]:
+            raise ValueError(f"Course graphic {png.name} missing from index.")
+    print(f"Link style: {linker.describe()}")
     print(f"Validated {len(expected)} lessons, {len(plan.get('graphics', []))} graphics, {count} local links.")
 
 

@@ -17,7 +17,19 @@ In the user's output directory, create:
 
 For Senior books, set `folder_prefix: "senior"`, `level: "Senior"`, and `ages: "15 and over"` in the plan. This produces `senior_{stage}_lessons/` and `senior_{stage}_graphics/`. Use `Senior Stage {stage} - {Book Title} - Lessons.md` for the index to avoid collisions with Intermediate books. Omitted fields retain the original Intermediate defaults. Treat the two levels as independent source material.
 
-Keep graphics and lessons in sibling folders, with relative, URL-encoded links so the set remains portable. The original PDF stays intact. Preserve teaching notes, Scripture references, applications, reference libraries, paragraph questions, and essay questions. This is a conversion, not a summary or newly authored lesson. Retain the source's theological perspective and historical context; correct clear OCR errors against the scan without silently revising teachings or modernizing dated claims.
+Keep graphics and lessons in sibling folders. The original PDF stays intact. Preserve teaching notes, Scripture references, applications, reference libraries, paragraph questions, and essay questions. This is a conversion, not a summary or newly authored lesson. Retain the source's theological perspective and historical context; correct clear OCR errors against the scan without silently revising teachings or modernizing dated claims.
+
+## Link style
+
+The script chooses the link style; do not choose it yourself. `build` and `validate` look for a `.obsidian/` folder in the output directory or any folder above it.
+
+- **No `.obsidian/` found:** relative, URL-encoded Markdown links, e.g. `[Lesson 1: Title](intermediate_1_lessons/Lesson%2001%20-%20Title.md)`.
+- **`.obsidian/` found:** the output is in an Obsidian vault. The script reads `.obsidian/app.json` and writes links the way Obsidian would:
+  - `useMarkdownLinks` absent or `false` → wikilinks, `[[target|label]]`, with `.md` dropped from note targets. `true` → Markdown links.
+  - `newLinkFormat` absent or `"shortest"` → the bare file name when no other file in the vault has that name, otherwise the path from the vault root (e.g. `[[books/intermediate_1_lessons/Lesson 02 - Title|Lesson 2: Title]]`). `"absolute"` → always the vault-root path. `"relative"` → the path from the linking note.
+  - The source PDF must be inside the vault. If it is not, `build` stops; copy the PDF into the output directory and point `source` in the plan at the copy.
+
+`build` prints the style it used as `Link style: ...`; include that line in the report. `validate` fails on any broken or ambiguous link and on any local link written in the other style, so links added during manual review must copy the format of the generated links exactly.
 
 ## Efficient workflow
 
@@ -26,7 +38,7 @@ Keep graphics and lessons in sibling folders, with relative, URL-encoded links s
 3. Create `WORKDIR/plan.json` using the schema below. Identify all lesson starts from the actual table of contents and body headings. Classify every PDF page as lesson text, index text, graphics, or ignored with a reason. A mixed text/illustration page belongs to both lesson text and graphics. Link graphics by subject, not just adjacency or a map's lesson numbers. A graphic can serve multiple lessons. Retain captions within the full-page PNG; avoid duplicating map OCR as lesson prose. Blank pages need no image.
 4. Run `scripts/stage_pdf.py build WORKDIR/plan.json OUTPUTDIR --pdftoppm PATH`. It uses cached text, creates the separate lessons and index directly, renders only selected graphic pages, and verifies links. Existing output files are protected; use `--overwrite` only after inspecting them and confirming they are this task's generated outputs. Do not overwrite unrelated stages.
 5. Review and edit the generated Markdown against the source. The paragraph/heading formatter is heuristic, not a substitute for reading. Repair split headings, paragraphs continued across page boundaries, Scripture citations, question numbering, and lists. Reconstruct multi-column tables as Markdown tables from the scan; never accept interleaved table OCR. For substantial layout exceptions, use a reviewed page override in the plan and rebuild before making final manual edits. OCR image-only text pages with available local tools if necessary; do not treat empty extraction as proof of a graphic-only page.
-6. Inspect the final PNGs for legibility, completeness, and correct orientation. Run `scripts/stage_pdf.py validate WORKDIR/plan.json OUTPUTDIR` after final edits. Confirm every lesson is represented, questions and reference sections remain, and all source/graphic/lesson links resolve. Report counts and the index link. Commit only when requested.
+6. Inspect the final PNGs for legibility, completeness, and correct orientation. Run `scripts/stage_pdf.py validate WORKDIR/plan.json OUTPUTDIR` after final edits. Confirm every lesson is represented, questions and reference sections remain, and all source/graphic/lesson links resolve. Report counts, the `Link style:` line, and the index link. Commit only when requested.
 
 Keep preparation data and the plan in a task-specific temporary directory. Keep it through review so correction is cheap; do not ship contact sheets or extraction caches as lesson assets. Do not reprocess Stage 4 when asked to process another stage.
 
