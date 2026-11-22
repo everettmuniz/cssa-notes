@@ -34,18 +34,24 @@ Class plans include Scripture readings, discussion prompts, and practical applic
 
 Start with a stage's lesson index, then choose a lesson. The Markdown files contain teaching notes, Scripture references, applications, reference libraries, and review questions from the source books. Related graphics and the original PDF are linked from the lessons where applicable.
 
-The files can be read directly on GitHub or in a local Markdown viewer. Links are relative, so they also work in a downloaded copy when the folder structure is preserved.
+The repository is an Obsidian vault. Open the whole folder as a vault in Obsidian to follow the links, which are wikilinks (`[[…]]`). GitHub and most other Markdown viewers show wikilinks as plain text, so the files can still be read there, but the links won't open. The "Maps and illustrations" links in the tables above point to folders, which Obsidian can't open; find those folders in the file explorer instead.
 
 The Markdown is a conversion of the source material, not a summary. Some scan or OCR errors may remain; consult the original PDFs for exact wording and layout. Page references refer to physical PDF pages, which may differ from printed page numbers. Historical and doctrinal statements retain the source's perspective.
 
 ## Repository layout
 
-- `intermediate_1_lessons/` through `intermediate_5_lessons/`: individual lesson files.
-- `intermediate_1_graphics/` through `intermediate_5_graphics/`: full-page PNG graphics, named by their source PDF page number.
-- `senior_1_lessons/` through `senior_5_lessons/`: individual Senior lesson files.
-- `senior_1_graphics/` through `senior_5_graphics/`: full-page Senior graphics, named by their source PDF page number.
-- `Intermediate S… - ….md` and `Senior Stage … - Lessons.md`: stage indexes linking the material together.
-- `13-14 Stage … .pdf` and `15 and Over Stage … .pdf`: original source books.
-- [[skills/muniz-process-sunday-school-pdf/SKILL|PDF processing skill]]: reusable instructions and tooling for converting stage PDFs into this structure.
+The stage material is in `books/`:
+
+- `books/intermediate_1_lessons/` through `books/intermediate_5_lessons/`: individual Intermediate lesson files.
+- `books/intermediate_1_graphics/` through `books/intermediate_5_graphics/`: full-page PNG graphics, named by their source PDF page number.
+- `books/senior_1_lessons/` through `books/senior_5_lessons/`: individual Senior lesson files.
+- `books/senior_1_graphics/` through `books/senior_5_graphics/`: full-page Senior graphics, named by their source PDF page number.
+- `books/Intermediate S… - ….md` and `books/Senior S… - ….md`: stage indexes linking the material together.
+- `books/13-14 Stage … .pdf` and `books/15 and Over Stage … .pdf`: original source books.
+
+Everything else:
+
+- `2026_classes/`: dated class plans (`11_08.md` for November 8), with class recordings and transcripts, plus `Images/` and `activities/` for the pictures and activity sheets the plans link to.
+- `skills/`: the agent skills used to build this material, including the [[skills/muniz-process-sunday-school-pdf/SKILL|PDF processing skill]], which converts stage PDFs into this structure.
 
 Source material is attributed to the Christadelphian Sunday School Association in the stage indexes and lesson files.
