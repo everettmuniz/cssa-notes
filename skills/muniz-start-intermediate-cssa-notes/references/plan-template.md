@@ -46,7 +46,7 @@ Clarify unfamiliar words such as *{word}* and *{word}*. Ask students to point to
 
 ## Read the lesson around
 
-Open [Lesson {NN} — {Title}](../books/{level}_{stage}_lessons/Lesson%20{NN}%20-%20{URL-encoded%20title}.md). Take turns reading paragraphs, pausing at section breaks to check understanding.
+Open [[Lesson {NN} - {Title}|Lesson {NN} — {Title}]]. Take turns reading paragraphs, pausing at section breaks to check understanding.
 
 > [!NOTE]- Lesson
 > ![[Lesson {NN} - {Title}]]

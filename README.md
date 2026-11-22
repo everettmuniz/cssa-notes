@@ -29,6 +29,8 @@ There are 250 lessons in total: 125 Intermediate and 125 Senior, with 25 lessons
 Class plans include Scripture readings, discussion prompts, and practical applications for each Sunday.
 
 - [[11_08|November 8, 2026 — The Baptism and Temptation of Jesus]]
+- [[11_15|November 15, 2026 — Jesus Meets Nicodemus the Pharisee]]
+- [[11_22|November 22, 2026 — Belief in the Messiah at Samaria]]
 
 ## Using the material
 
